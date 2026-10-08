@@ -92,6 +92,10 @@ In my Lab 02 build, both VMs and the VNet are in one resource group, `rglab02-yo
 
 A stopped VM still bills for its disk and IP, which is why these are deleted instead of stopped.
 
+<img width="956" height="437" alt="Screenshot 2026-09-30 085658" src="https://github.com/user-attachments/assets/4499ea1f-08f8-4196-82d0-7b662e5175fa" />
+<img width="473" height="458" alt="Screenshot 2026-09-30 213038" src="https://github.com/user-attachments/assets/b0762566-6cf2-462a-99ac-0f74553b3c26" />
+
+
 ### Part 2: Deploy Azure SQL Database
 
 1. Search **SQL databases**, open the **+ Create** dropdown, and choose **SQL database** (not the Free offer).
