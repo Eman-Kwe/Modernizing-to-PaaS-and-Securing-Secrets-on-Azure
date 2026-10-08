@@ -40,7 +40,6 @@ The common shortcut is to run the database on a VM and keep its password in a co
 - Key Vault holds `SqlAdminPassword` and uses the Azure RBAC permission model.
 - `sqldb-app` runs on Azure SQL Database (Basic tier) behind the logical server `sql-server-your-name`.
 - The old database VM `vm-db-02` and its NIC, disk, NSG, and SSH key are deleted in Part 1.
-- Editable source: [`docs/architecture.drawio`](docs/architecture.drawio) (open at [app.diagrams.net](https://app.diagrams.net))
 
 **Key point:** the Managed Identity only covers the connection to Key Vault. The database still uses a SQL login, so the VM needs the password from Key Vault to connect. Switching the database to Microsoft Entra authentication would remove that password entirely (see Known Limitations).
 
