@@ -2,7 +2,7 @@
 
 ## 🎬 Video Walkthrough
 
-[![Loom](https://img.shields.io/badge/Loom-Watch%20Walkthrough-8B5CF6)](https://www.loom.com/share/YOUR-VIDEO-ID)
+[![Loom](https://img.shields.io/badge/Loom-Watch%20Walkthrough-8B5CF6)](https://www.loom.com/share/9588be60c6cd4929be7d5bb39befe2a9)
 
 ---
 
