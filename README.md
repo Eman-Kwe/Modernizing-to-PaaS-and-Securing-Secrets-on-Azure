@@ -1,10 +1,7 @@
 # Modernizing to PaaS and Securing Secrets on Azure
 
-**Status:** Built and verified through the Key Vault test. Part 1 (deleting the database VM) and the Metrics chart are still to do. <!-- When everything is done and the resources are deleted, replace with: "Built, deployed, and verified end-to-end. Cleaned up after testing to avoid ongoing charges." Only after it is true. -->
-
 ## 🎬 Video Walkthrough
 
-<!-- After recording: replace YOUR-VIDEO-ID with your Loom video ID (the last part of the share link) -->
 [![Loom](https://img.shields.io/badge/Loom-Watch%20Walkthrough-8B5CF6)](https://www.loom.com/share/YOUR-VIDEO-ID)
 
 ---
@@ -84,7 +81,6 @@ Replace `your-name` with your own lowercase name or initials. SQL server and Key
 
 ## Project Steps
 
-> Screenshots go in `docs/screenshots/` with the filenames shown. Passwords, secret values, and subscription IDs are blurred or left out.
 
 ### Part 1: Decommission the old database VM
 
