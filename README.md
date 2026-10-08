@@ -39,8 +39,6 @@ The common shortcut is to run the database on a VM and keep its password in a co
 
 ## Architecture
 
-![Architecture diagram](docs/architecture.png)
-
 - `vm-web-01` (from Lab 02) has a system-assigned Managed Identity and the **Key Vault Secrets User** role on the vault. It can read secrets and nothing else.
 - Key Vault holds `SqlAdminPassword` and uses the Azure RBAC permission model.
 - `sqldb-app` runs on Azure SQL Database (Basic tier) behind the logical server `sql-server-your-name`.
@@ -99,10 +97,6 @@ In my Lab 02 build, both VMs and the VNet are in one resource group, `rglab02-yo
 
 A stopped VM still bills for its disk and IP, which is why these are deleted instead of stopped.
 
-![DB VM resources selected](docs/screenshots/01-db-vm-resources-selected.png)
-
-![Web VM still running](docs/screenshots/02-web-vm-still-running.png)
-
 ### Part 2: Deploy Azure SQL Database
 
 1. Search **SQL databases**, open the **+ Create** dropdown, and choose **SQL database** (not the Free offer).
@@ -118,15 +112,12 @@ A stopped VM still bills for its disk and IP, which is why these are deleted ins
 8. **Security** tab: Microsoft Defender for SQL **Not now**. Skip the other tabs.
 9. **Review + create**, check the tier and resource group, then **Create**. It took about 2 to 3 minutes.
 
-![Basic tier and cost](docs/screenshots/04-basic-tier-cost.png)
+<img width="476" height="436" alt="Screenshot 2026-09-30 214019" src="https://github.com/user-attachments/assets/8557fcb9-d781-4e75-8fae-a79c2409bcf4" />
+<img width="944" height="434" alt="Screenshot 2026-09-30 215729" src="https://github.com/user-attachments/assets/be9aa78f-a10c-45e2-a634-da14c1e147c5" />
+<img width="928" height="437" alt="Screenshot 2026-09-30 215651" src="https://github.com/user-attachments/assets/ece4bdfe-ddf8-42e9-bcc6-82488fa7e733" />
+<img width="955" height="439" alt="Screenshot 2026-09-30 220254" src="https://github.com/user-attachments/assets/575c9c95-068c-4097-8ad2-c8158b22d8c5" />
 
-![SQL networking settings](docs/screenshots/05-sql-networking.png)
-
-![SQL review page](docs/screenshots/06-sql-review-create.png)
-
-![Database online](docs/screenshots/07-sqldb-online.png)
-
-### Part 3: Deploy Azure Key Vault
+### Part 3  Deploy Azure Key Vault
 
 1. Search **Key vaults** → **+ Create**.
 2. Resource group `rg-lab03-your-name`, name `kv-lab03-your-name`, region East US, tier **Standard**.
@@ -138,11 +129,11 @@ A stopped VM still bills for its disk and IP, which is why these are deleted ins
 
 My subscription-level **Owner** role manages resources but does not read secrets, so the vault needed its own data-plane role.
 
-![Key Vault review](docs/screenshots/08-keyvault-review.png)
 
-![Key Vault overview](docs/screenshots/09-keyvault-overview.png)
+<img width="445" height="427" alt="Screenshot 2026-09-30 221132" src="https://github.com/user-attachments/assets/2b932b4f-a7a4-4046-b74a-df5fb5225403" />
+<img width="955" height="439" alt="Screenshot 2026-09-30 220254" src="https://github.com/user-attachments/assets/61b5311f-72a6-4155-82ee-41cf9e435c6b" />
+<img width="794" height="434" alt="Screenshot 2026-09-30 221425" src="https://github.com/user-attachments/assets/81ec90ae-393e-49d2-91a5-bcf7a2c75ea0" />
 
-![Admin role assignment](docs/screenshots/10-admin-role-assignment.png)
 
 ### Part 4: Store the SQL password as a secret
 
@@ -150,17 +141,18 @@ My subscription-level **Owner** role manages resources but does not read secrets
 2. Name `SqlAdminPassword`. Value: the SQL admin password from Part 2. Leave everything else at default.
 3. Click **Create**.
 
-![Secret created](docs/screenshots/11-secret-created.png)
-
 ### Part 5: Enable Managed Identity and grant Key Vault access
 
 **Enable the identity**
 
-1. `rglab02-your-name` → `vm-web-01` → **Identity** → **System assigned**.
+1. `rglab03-your-name` → `vm-web-01` → **Identity** → **System assigned**.
 2. Set Status to **On**, click **Save**, then **Yes**.
 3. Note the **Object (principal) ID** that appears.
 
-![Managed identity on](docs/screenshots/12-managed-identity-on.png)
+
+<img width="820" height="244" alt="Screenshot 2026-09-30 222153" src="https://github.com/user-attachments/assets/a141e217-8c02-479b-a180-342c82ac260b" />
+
+<img width="952" height="439" alt="Screenshot 2026-09-30 222643" src="https://github.com/user-attachments/assets/3593bc6a-09cc-4b84-9c3b-a0591502d701" />
 
 **Grant read access, from the Key Vault itself**
 
@@ -168,10 +160,7 @@ My subscription-level **Owner** role manages resources but does not read secrets
 2. Role: **Key Vault Secrets User**. This gives read access to secret values and nothing more.
 3. Members: **Managed identity** → **+ Select members** → **Virtual machine** → `vm-web-01`.
 4. On the review page, check that the **Scope** ends in `.../vaults/kv-lab03-your-name`. Then **Review + assign** twice.
-
-![Role assignment confirmed](docs/screenshots/13-role-assignment-confirmed.png)
-
-![Role assignments list](docs/screenshots/14-role-assignments-list.png)
+<img width="950" height="433" alt="Screenshot 2026-09-30 221623" src="https://github.com/user-attachments/assets/b19008de-46f3-452e-bb4c-0a68815ad640" />
 
 ### Part 6: Verify that the VM can read the secret
 
@@ -194,7 +183,6 @@ curl -s -H "Authorization: Bearer $TOKEN" \
 
 It prints the secret's ID, not its value. A `Forbidden` error usually means the role has not propagated yet, so wait a minute and run the last two commands again.
 
-![VM reads secret](docs/screenshots/15-vm-secret-read.png)
 
 ### Part 7: Validate with Azure Monitor
 
@@ -202,7 +190,8 @@ It prints the secret's ID, not its value. A `Forbidden` error usually means the 
 2. **Monitoring** → **Metrics**. Metric **DTU percentage** (or **CPU percentage** if DTU is not listed), aggregation **Max**.
 3. A visible line, even near zero, shows the database is live and monitored. A new database can take several minutes to report.
 
-![Metrics chart](docs/screenshots/16-metrics-chart.png)
+<img width="946" height="437" alt="Screenshot 2026-09-30 224701" src="https://github.com/user-attachments/assets/ef5838e2-73f7-4940-9e66-c4223de557ea" />
+<img width="946" height="412" alt="Screenshot 2026-09-30 225449" src="https://github.com/user-attachments/assets/83aba064-d0a0-4f17-8151-d1921a52602f" />
 
 ## Result
 
